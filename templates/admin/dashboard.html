@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Admin Dashboard</h2>
+    <div class="section">
+        <h3>Subjects</h3>
+        <table>
+            <tr>
+                <th>Chapter Name</th>
+                <th>Total Questions</th>
+                <th>Action</th>
+            </tr>
+            <tr>
+                <td>Physics</td>
+                <td>10</td>
+                <td><a href="#">Edit/Delete</a></td>
+            </tr>
+            <tr>
+                <td>App Dev</td>
+                <td>8</td>
+                <td><a href="#">Edit/Delete</a></td>
+            </tr>
+        </table>
+        <a href="{{ url_for('admin.add_chapter') }}" class="btn">+ Add Chapter</a>
+    </div>
+
+    <div class="section">
+        <h3>Quizzes</h3>
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Action</th>
+            </tr>
+            <tr>
+                <td>CSS Basics</td>
+                <td><a href="#">Edit/Delete</a></td>
+            </tr>
+            <tr>
+                <td>HTML Fundamentals</td>
+                <td><a href="#">Edit/Delete</a></td>
+            </tr>
+        </table>
+        <a href="{{ url_for('admin.add_quiz') }}" class="btn">+ Add Quiz</a>
+    </div>
+</div>
+{% endblock %}

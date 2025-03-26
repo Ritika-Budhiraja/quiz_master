@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Welcome, User</h2>
+
+    <!-- Upcoming Quizzes Table -->
+    <h3>Upcoming Quizzes</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Quiz</th>
+                <th>Subject</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Maths Quiz</td>
+                <td>Mathematics</td>
+                <td>2025-04-01</td>
+                <td>10:00</td>
+                <td><a href="#" class="btn btn-primary">Start</a></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Scores Section -->
+    <h3>Quiz Scores</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Quiz</th>
+                <th>Date</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Maths Quiz</td>
+                <td>2025-03-20</td>
+                <td>85%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Performance Charts -->
+    <h3>Performance Summary</h3>
+    <div class="chart-container">
+        <canvas id="barChart"></canvas>
+        <canvas id="pieChart"></canvas>
+    </div>
+</div>
+
+<!-- Chart.js for Bar & Pie Chart -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var ctxBar = document.getElementById("barChart").getContext("2d");
+    var barChart = new Chart(ctxBar, {
+        type: "bar",
+        data: {
+            labels: ["Maths", "Physics", "Chemistry"],
+            datasets: [{
+                label: "Top Scores",
+                data: [85, 78, 90],
+                backgroundColor: ["#3498db", "#2ecc71", "#e74c3c"]
+            }]
+        }
+    });
+
+    var ctxPie = document.getElementById("pieChart").getContext("2d");
+    var pieChart = new Chart(ctxPie, {
+        type: "pie",
+        data: {
+            labels: ["Attempted", "Not Attempted"],
+            datasets: [{
+                data: [75, 25],
+                backgroundColor: ["#f1c40f", "#95a5a6"]
+            }]
+        }
+    });
+});
+</script>
+{% endblock %}
+
