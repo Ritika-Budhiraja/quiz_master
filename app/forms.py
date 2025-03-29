@@ -1,27 +1,50 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, DateField, TextAreaField, SelectField, DateTimeField, IntegerField, FieldList, FormField
-from wtforms.validators import DataRequired, Email, Length, EqualTo, Optional, ValidationError
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField, SelectField, DateField, RadioField
+from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length
+from models import User
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
+    remember_me = BooleanField('Remember Me')
+    submit = SubmitField('Sign In')
 
-class RegisterForm(FlaskForm):
+class RegistrationForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired(), Length(min=3, max=64)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
-    confirm_password = PasswordField('Confirm Password', 
-        validators=[DataRequired(), EqualTo('password')])
+    password2 = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     full_name = StringField('Full Name', validators=[DataRequired()])
-    qualification = StringField('Qualification', validators=[DataRequired()])
-    dob = DateField('Date of Birth', validators=[DataRequired()])
+    date_of_birth = DateField('Date of Birth', validators=[DataRequired()])
+    submit = SubmitField('Register')
+    
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
+        if user is not None:
+            raise ValidationError('Username already taken.')
+    
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user is not None:
+            raise ValidationError('Email already registered.')
+
 class SubjectForm(FlaskForm):
-    name = StringField('Subject Name', validators=[DataRequired(), Length(min=2, max=120)])
-    description = TextAreaField('Description', validators=[Optional()])
+    name = StringField('Subject Name', validators=[DataRequired()])
+    description = TextAreaField('Description')
+    submit = SubmitField('Add Subject')
 
 class ChapterForm(FlaskForm):
+    title = StringField('Chapter Title', validators=[DataRequired()])
+    description = TextAreaField('Description')
     subject_id = SelectField('Subject', coerce=int, validators=[DataRequired()])
-    name = StringField('Chapter Name', validators=[DataRequired(), Length(min=2, max=120)])
-    description = TextAreaField('Description', validators=[Optional()])
+    submit = SubmitField('Add Chapter')
+
+class QuizForm(FlaskForm):
+    title = StringField('Quiz Title', validators=[DataRequired()])
+    description = TextAreaField('Description')
+    duration_minutes = IntegerField('Duration (minutes)', default=30)
+    chapter_id = SelectField('Chapter', coerce=int, validators=[DataRequired()])
+    submit = SubmitField('Create Quiz')
 
 class QuestionForm(FlaskForm):
     question_text = TextAreaField('Question', validators=[DataRequired()])
@@ -29,13 +52,5 @@ class QuestionForm(FlaskForm):
     option_b = StringField('Option B', validators=[DataRequired()])
     option_c = StringField('Option C', validators=[DataRequired()])
     option_d = StringField('Option D', validators=[DataRequired()])
-    correct_option = SelectField('Correct Option', 
-                               choices=[('A', 'A'), ('B', 'B'), ('C', 'C'), ('D', 'D')],
-                               validators=[DataRequired()])
-
-class QuizForm(FlaskForm):
-    chapter_id = SelectField('Chapter', coerce=int, validators=[DataRequired()])
-    date_of_quiz = DateTimeField('Quiz Date', format='%Y-%m-%d %H:%M', validators=[DataRequired()])
-    duration_minutes = IntegerField('Duration (minutes)', validators=[DataRequired()])
-    remarks = TextAreaField('Remarks', validators=[Optional()])
-    questions = FieldList(FormField(QuestionForm), min_entries=1)
+    correct_option = RadioField('Correct Option', choices=[(1, 'A'), (2, 'B'), (3, 'C'), (4, 'D')], coerce=int, validators=[DataRequired()])
+    submit = SubmitField('Add Question')
