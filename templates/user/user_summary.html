@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Summary</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            border: 2px solid #000;
+            border-radius: 15px;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .title {
+            color: #1e88e5;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .navigation {
+            display: flex;
+            background-color: #f0f8ff;
+            padding: 8px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .nav-item {
+            margin-right: 10px;
+            color: #1e88e5;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .nav-item.active {
+            text-decoration: underline;
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+        }
+        .search-input {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+        .search-button {
+            background-color: #f8cd53;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .welcome {
+            margin-left: 10px;
+            color: #1e88e5;
+        }
+        .charts-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .chart {
+            width: 48%;
+            text-align: center;
+        }
+        .chart-title {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            height: 200px;
+            margin-top: 10px;
+        }
+        .bar {
+            width: 40px;
+            margin: 0 10px;
+            position: relative;
+        }
+        .bar-label {
+            position: absolute;
+            bottom: -25px;
+            width: 100%;
+            text-align: center;
+        }
+        .bar-maths {
+            height: 100px;
+            background-color: #90caf9;
+        }
+        .bar-physics {
+            height: 180px;
+            background-color: #4caf50;
+        }
+        .bar-chemistry {
+            height: 130px;
+            background-color: #ffcdd2;
+        }
+        .pie-chart {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: #ffcccb;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        .pie-slice {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        .pie-slice1 {
+            clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 50% 100%);
+            background-color: #ffb6c1;
+        }
+        .pie-slice2 {
+            clip-path: polygon(50% 50%, 50% 0%, 0% 0%, 0% 50%);
+            background-color: #ffd1dc;
+        }
+        .pie-slice3 {
+            clip-path: polygon(50% 50%, 0% 50%, 0% 100%, 50% 100%);
+            background-color: #ffc0cb;
+        }
+        .pie-label {
+            position: absolute;
+            font-weight: bold;
+        }
+        .label-03 {
+            top: 45%;
+            left: 45%;
+        }
+        .label-01 {
+            top: 30%;
+            right: 25%;
+        }
+        .label-02 {
+            bottom: 30%;
+            left: 25%;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">Summary Charts</div>
+    
+    <div class="container">
+        <div class="navigation">
+            <a href="home.html" class="nav-item">Home</a>
+            <a href="scores.html" class="nav-item">Scores</a>
+            <a href="summary.html" class="nav-item active">Summary</a>
+            <a href="logout.html" class="nav-item">Logout</a>
+        </div>
+        
+        <div class="header">
+            <div></div>
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search...">
+                <button class="search-button">Search</button>
+            </div>
+            <div class="welcome">Welcome User</div>
+        </div>
+        
+        <div class="charts-container">
+            <div class="chart">
+                <div class="chart-title">Subject wise no.of quizzes</div>
+                <div class="bar-chart">
+                    <div class="bar">
+                        <div class="bar-maths"></div>
+                        <div class="bar-label">Maths</div>
+                    </div>
+                    <div class="bar">
+                        <div class="bar-physics"></div>
+                        <div class="bar-label">Physics</div>
+                    </div>
+                    <div class="bar">
+                        <div class="bar-chemistry"></div>
+                        <div class="bar-label">Chemistry</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart">
+                <div class="chart-title">Month wise no.of quizzes attempted</div>
+                <div class="pie-chart">
+                    <div class="pie-slice pie-slice1"></div>
+                    <div class="pie-slice pie-slice2"></div>
+                    <div class="pie-slice pie-slice3"></div>
+                    <div class="pie-label label-03">03</div>
+                    <div class="pie-label label-01">01</div>
+                    <div class="pie-label label-02">02</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Add JavaScript functionality
+        document.querySelector('.search-button').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.search-input').value;
+            alert('Searching for: ' + searchTerm);
+            // Add actual search functionality here
+        });
+        
+        // This could be replaced with dynamic chart generation using Chart.js or D3.js
+        // For a production app, you would use actual data from Jinja templates
+        function updateCharts(data) {
+            // Code to update charts based on data
+            console.log("Chart data updated", data);
+        }
+        
+        // Example if you want to fetch data dynamically
+        /*
+        fetch('/api/quiz-statistics')
+            .then(response => response.json())
+            .then(data => {
+                updateCharts(data);
+            });
+        */
+    </script>
+</body>
+</html>

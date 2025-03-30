@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Scores</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            border: 2px solid #000;
+            border-radius: 15px;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .title {
+            color: #1e88e5;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .navigation {
+            display: flex;
+            background-color: #f0f8ff;
+            padding: 8px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .nav-item {
+            margin-right: 10px;
+            color: #1e88e5;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .nav-item.active {
+            text-decoration: underline;
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+        }
+        .search-input {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+        .search-button {
+            background-color: #f8cd53;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .welcome {
+            margin-left: 10px;
+            color: #1e88e5;
+        }
+        .scores-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .scores-table th {
+            background-color: #e6f2ff;
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .scores-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .scores-container {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .filter-options {
+            color: #4CAF50;
+            text-align: right;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">Scores</div>
+    <div class="filter-options">
+        Searching subjects/quizzes by date/scores
+    </div>
+    
+    <div class="container">
+        <div class="navigation">
+            <a href="home.html" class="nav-item">Home</a>
+            <a href="scores.html" class="nav-item active">Scores</a>
+            <a href="summary.html" class="nav-item">Summary</a>
+            <a href="logout.html" class="nav-item">Logout</a>
+        </div>
+        
+        <div class="header">
+            <div></div>
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search...">
+                <button class="search-button">Search</button>
+            </div>
+            <div class="welcome">Welcome User</div>
+        </div>
+        
+        <h3 class="title">Quiz Scores</h3>
+        
+        <div class="scores-container">
+            <table class="scores-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>No.of Questions</th>
+                        <th>Date</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for score in scores %}
+                    <tr>
+                        <td>{{ score.id }}</td>
+                        <td>{{ score.num_questions }}</td>
+                        <td>{{ score.date }}</td>
+                        <td>{{ score.score }}</td>
+                    </tr>
+                    {% endfor %}
+                    <!-- Default values if no Jinja data is provided -->
+                    {% if not scores %}
+                    <tr>
+                        <td>1</td>
+                        <td>05</td>
+                        <td>xx/xx/xxxx</td>
+                        <td>3/5</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>15</td>
+                        <td>xx/xx/xxxx</td>
+                        <td>12/15</td>
+                    </tr>
+                    <tr>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        // Add any JavaScript functionality here
+        document.querySelector('.search-button').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.search-input').value;
+            alert('Searching for: ' + searchTerm);
+            // Add actual search functionality here
+        });
+    </script>
+</body>
+</html>

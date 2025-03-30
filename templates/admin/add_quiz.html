@@ -1,23 +1,204 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Add New Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f0f0;
+        }
+        .header {
+            background-color: #f9f0f0;
+            color: #8a3434;
+            padding: 10px 20px;
+            text-align: right;
+        }
+        .main-title {
+            color: #4169e1;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 28px;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+        .nav-bar {
+            background-color: #b3daff;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .nav-links a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+        .search-box {
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            width: 250px;
+        }
+        .content-box {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+        }
+        .section-title {
+            color: #ff8c00;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .form-label {
+            width: 150px;
+            text-align: right;
+            margin-right: 20px;
+            color: #0066cc;
+            font-weight: bold;
+        }
+        .form-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            max-width: 500px;
+        }
+        .form-note {
+            color: #ff0000;
+            text-align: center;
+            font-style: italic;
+            margin: 15px 0;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        .btn {
+            padding: 10px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: #b3daff;
+            color: black;
+        }
+        .btn-secondary {
+            background-color: #b3daff;
+            color: black;
+        }
+        .question-icon {
+            background-color: #4169e1;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 10px;
+            font-size: 14px;
+            cursor: help;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        Admin Dashboard
+    </div>
 
-{% block content %}
-<div class="container">
-    <h2>Add New Quiz</h2>
-    <form action="{{ url_for('admin.add_quiz') }}" method="POST">
-        <label for="chapter_id">Chapter:</label>
-        <select id="chapter_id" name="chapter_id">
-            <option value="1">Physics</option>
-            <option value="2">CSS</option>
-        </select>
+    <div class="container">
+        <h1 class="main-title">Admin Dashboard</h1>
 
-        <label for="date">Date:</label>
-        <input type="date" id="date" name="date" required>
+        <div class="nav-bar">
+            <div class="nav-links">
+                <a href="#">Home</a>
+                <a href="#">Quiz</a>
+                <a href="#">Summary</a>
+                <a href="#">Logout</a>
+            </div>
+            <div class="search-area">
+                <input type="text" class="search-box" placeholder="Search">
+            </div>
+            <div class="welcome-text">
+                Welcome Admin
+            </div>
+        </div>
 
-        <label for="duration">Duration (minutes):</label>
-        <input type="number" id="duration" name="duration" required>
-
-        <button type="submit" class="btn">Save</button>
-        <a href="{{ url_for('admin.dashboard') }}" class="btn cancel">Cancel</a>
-    </form>
-</div>
-{% endblock %}
+        <div class="content-box">
+            <h2 class="section-title">Add New Quiz</h2>
+            
+            <div class="form-group">
+                <label class="form-label">Chapter ID:</label>
+                <input type="text" class="form-input">
+                <span class="question-icon">?</span>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Subject:</label>
+                <select class="form-input">
+                    <option value="">Select Subject</option>
+                    <option value="Physics">Physics</option>
+                    <option value="App Dev-I">App Dev-I</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Chapter:</label>
+                <select class="form-input">
+                    <option value="">Select Chapter</option>
+                    <option value="Force">Force</option>
+                    <option value="EMF">EMF</option>
+                    <option value="HTML">HTML</option>
+                    <option value="CSS">CSS</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Date:</label>
+                <input type="text" class="form-input" placeholder="dd/mm/yyyy">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Duration:</label>
+                <input type="text" class="form-input" placeholder="hh:mm">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">No. of Questions:</label>
+                <input type="number" class="form-input">
+            </div>
+            
+            <p class="form-note">Note: may include more input fields...</p>
+            
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

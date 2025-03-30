@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start the Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+        .title {
+            color: #1e88e5;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .quiz-container {
+            border: 2px solid #000;
+            border-radius: 15px;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+        }
+        .question-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .question-number {
+            background-color: #ffe082;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        .timer {
+            background-color: #90caf9;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        .question-statement {
+            border: 1px solid #1e88e5;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .options {
+            margin-bottom: 20px;
+        }
+        .option {
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+        .option-number {
+            margin-right: 10px;
+        }
+        .option-circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid #1e88e5;
+            background-color: #90caf9;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        .option-selected {
+            background-color: #333;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .button {
+            background-color: #90caf9;
+            border: none;
+            color: #000;
+            padding: 8px 20px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">Start the Quiz</div>
+    
+    <div class="quiz-container">
+        <div class="question-info">
+            <div class="question-number">Q.No. {{ current_question }}/{{ total_questions }}</div>
+            <div class="timer">{{ timer }}</div>
+        </div>
+        
+        <div class="question-statement">
+            {{ question_statement }}
+        </div>
+        
+        <div class="options">
+            {% for option in options %}
+            <div class="option">
+                <span class="option-number">{{ loop.index }}) </span>
+                <span class="option-text">{{ option.text }}</span>
+                <span class="option-circle {% if option.selected %}option-selected{% endif %}"></span>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="button-container">
+            <button class="button">Save and Next</button>
+            <button class="button">Submit</button>
+        </div>
+    </div>
+    
+    <div class="title" style="margin-top: 20px;">
+        <a href="/view_quiz" style="color: #1e88e5; text-decoration: none;">View the Quiz</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up timer
+            let time = {{ time_remaining }};
+            const timerElement = document.querySelector('.timer');
+            
+            setInterval(function() {
+                let minutes = Math.floor(time / 60);
+                let seconds = time % 60;
+                
+                // Format the time as MM:SS
+                timerElement.textContent = 
+                    (minutes < 10 ? '0' + minutes : minutes) + ':' + 
+                    (seconds < 10 ? '0' + seconds : seconds);
+                
+                if (time > 0) {
+                    time--;
+                }
+            }, 1000);
+            
+            // Option selection
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Clear previous selections
+                    options.forEach(opt => {
+                        opt.querySelector('.option-circle').classList.remove('option-selected');
+                    });
+                    
+                    // Select this option
+                    this.querySelector('.option-circle').classList.add('option-selected');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

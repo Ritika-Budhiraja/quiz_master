@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Edit Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f0f0;
+        }
+        .header {
+            background-color: #f9f0f0;
+            color: #8a3434;
+            padding: 10px 20px;
+            text-align: right;
+        }
+        .main-title {
+            color: #4169e1;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 28px;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+        .nav-bar {
+            background-color: #b3daff;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .nav-links a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+        .search-box {
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            width: 250px;
+        }
+        .form-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin: 30px auto;
+            max-width: 700px;
+            border: 1px solid #e0e0e0;
+        }
+        .form-title {
+            color: #ff9900;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .form-label {
+            min-width: 150px;
+            text-align: right;
+            margin-right: 15px;
+            color: #0066cc;
+            font-weight: bold;
+        }
+        .form-control {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            flex: 1;
+        }
+        .form-textarea {
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            min-height: 100px;
+            width: 100%;
+        }
+        .form-note {
+            color: #ff0000;
+            text-align: center;
+            font-style: italic;
+            margin: 15px 0;
+        }
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .btn {
+            padding: 10px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: #a8d7ff;
+            border: 1px solid #88b8ff;
+            color: black;
+        }
+        .btn-secondary {
+            background-color: #a8d7ff;
+            border: 1px solid #88b8ff;
+            color: black;
+        }
+        .question-icon {
+            background-color: #4169e1;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 10px;
+            font-size: 14px;
+            cursor: help;
+        }
+        .section-divider {
+            border-top: 1px solid #eee;
+            margin: 20px 0;
+        }
+        .section-title {
+            text-align: center;
+            font-weight: bold;
+            color: #ff9900;
+            margin: 20px 0 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        Admin Dashboard
+    </div>
+
+    <div class="container">
+        <h1 class="main-title">Admin Dashboard</h1>
+
+        <div class="nav-bar">
+            <div class="nav-links">
+                <a href="#">Home</a>
+                <a href="#">Quiz</a>
+                <a href="#">Summary</a>
+                <a href="#">Logout</a>
+            </div>
+            <div class="search-area">
+                <input type="text" class="search-box" placeholder="Search">
+            </div>
+            <div class="welcome-text">
+                Welcome Admin
+            </div>
+        </div>
+
+        <div class="form-container">
+            <h2 class="form-title">Edit Quiz</h2>
+            
+            <form action="#" method="post">
+                <div class="form-group">
+                    <label class="form-label">Quiz ID:</label>
+                    <input type="text" name="quiz_id" class="form-control" value="QZ001" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Subject:</label>
+                    <select name="subject" class="form-control">
+                        <option value="Physics">Physics</option>
+                        <option value="App Dev-I">App Dev-I</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Chapter:</label>
+                    <select name="chapter" class="form-control">
+                        <option value="Force">Force</option>
+                        <option value="EMF">EMF</option>
+                        <option value="HTML">HTML</option>
+                        <option value="CSS">CSS</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Date:</label>
+                    <input type="text" name="date" class="form-control" placeholder="dd/mm/yyyy" value="15/03/2025">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Duration:</label>
+                    <input type="text" name="duration" class="form-control" placeholder="hh:mm" value="01:30">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">No. of Questions:</label>
+                    <input type="number" name="num_questions" class="form-control" value="10">
+                </div>
+                
+                <div class="section-divider"></div>
+                <h3 class="section-title">Questions</h3>
+                
+                <div class="form-group">
+                    <label class="form-label">Current Questions:</label>
+                    <select name="existing_questions" class="form-control">
+                        <option value="">Select to Edit</option>
+                        <option value="1">Question 1: Newton's Laws</option>
+                        <option value="2">Question 2: Force and Motion</option>
+                        <option value="3">Question 3: Gravity</option>
+                    </select>
+                </div>
+                
+                <div class="btn-container">
+                    <button type="button" class="btn btn-primary">Add New Question</button>
+                    <button type="button" class="btn btn-primary">Edit Selected</button>
+                    <button type="button" class="btn btn-primary">Delete Selected</button>
+                </div>
+                
+                <div class="section-divider"></div>
+                
+                <div class="btn-container">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

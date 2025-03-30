@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Master - Admin Dashboard</title>
+    <style>
+        :root {
+            --primary-color: #4a6bff;
+            --secondary-color: #6c63ff;
+            --accent-color: #ff6584;
+            --background-color: #f9f9ff;
+            --text-color: #333;
+            --light-text: #ffffff;
+            --light-blue: #a8d5ff;
+            --border-color: #ccc;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .admin-banner {
+            background-color: #f8d7da;
+            color: #721c24;
+            text-align: right;
+            padding: 5px 15px;
+            font-weight: bold;
+            border-bottom: 1px solid #f5c6cb;
+        }
+        
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .dashboard-header {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .dashboard-panel {
+            border: 2px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 30px;
+            background-color: #fff;
+        }
+        
+        .nav-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--light-blue);
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+        
+        .nav-menu a:hover {
+            color: var(--primary-color);
+        }
+        
+        .search-box {
+            padding: 5px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            outline: none;
+        }
+        
+        .welcome-text {
+            margin-left: 20px;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .subjects-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .subject-panel {
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 15px;
+        }
+        
+        .subject-header {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .chapter-list {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        
+        .chapter-list th {
+            background-color: #f5f5f5;
+            padding: 8px;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+        
+        .chapter-list td {
+            padding: 8px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .action-links a {
+            text-decoration: none;
+            color: var(--primary-color);
+            margin-right: 5px;
+        }
+        
+        .action-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .add-chapter-btn {
+            background-color: #fff;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 5px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            display: block;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .add-chapter-btn:hover {
+            background-color: #f0f0ff;
+        }
+        
+        .all-subjects-link {
+            display: block;
+            text-align: left;
+            margin: 10px 0;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .all-subjects-link:hover {
+            text-decoration: underline;
+        }
+        
+        .pagination {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .page-num {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #fff;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            text-align: center;
+            line-height: 30px;
+            margin: 0 5px;
+            text-decoration: none;
+        }
+        
+        .page-num.active {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+        
+        /* Modal for adding chapters */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            width: 400px;
+            max-width: 90%;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .close-btn {
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+        
+        .btn-submit {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Banner -->
+    <div class="admin-banner">
+        Admin Dashboard
+    </div>
+    
+    <div class="dashboard-container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            Admin Dashboard
+        </div>
+        
+        <!-- Main Dashboard Panel -->
+        <div class="dashboard-panel">
+            <!-- Navigation Panel -->
+            <div class="nav-panel">
+                <div class="nav-menu">
+                    <a href="#">Home</a>
+                    <a href="#">Quiz</a>
+                    <a href="#">Summary</a>
+                    <a href="#">Logout</a>
+                </div>
+                
+                <input type="text" class="search-box" placeholder="Search">
+                
+                <div class="welcome-text">
+                    Welcome Admin
+                </div>
+            </div>
+            
+            <!-- Subjects and Chapters Section -->
+            <div class="subjects-container">
+                <!-- Physics Subject Panel -->
+                <div class="subject-panel">
+                    <div class="subject-header">Physics</div>
+                    
+                    <table class="chapter-list">
+                        <thead>
+                            <tr>
+                                <th>Chapter name</th>
+                                <th>No.of Questions</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Force</td>
+                                <td>xxxxxx</td>
+                                <td class="action-links">
+                                    <a href="#">Edit</a>/<a href="#">Delete</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>EMF</td>
+                                <td>xxxxxx</td>
+                                <td class="action-links">
+                                    <a href="#">Edit</a>/<a href="#">Delete</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <button class="add-chapter-btn" onclick="openModal('physics')">+ Chapter</button>
+                </div>
+                
+                <!-- App Dev Subject Panel -->
+                <div class="subject-panel">
+                    <div class="subject-header">App Dev-I</div>
+                    
+                    <table class="chapter-list">
+                        <thead>
+                            <tr>
+                                <th>Chapter name</th>
+                                <th>No.of Questions</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>HTML</td>
+                                <td>xxxxxx</td>
+                                <td class="action-links">
+                                    <a href="#">Edit</a>/<a href="#">Delete</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>CSS</td>
+                                <td>xxxxxx</td>
+                                <td class="action-links">
+                                    <a href="#">Edit</a>/<a href="#">Delete</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <button class="add-chapter-btn" onclick="openModal('appdev')">+ Chapter</button>
+                </div>
+            </div>
+            
+            <!-- All Subjects Link -->
+            <a href="#" class="all-subjects-link">All subjects here ...</a>
+            
+            <!-- Pagination -->
+            <div class="pagination">
+                <a href="#" class="page-num active">1</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Chapter Modal -->
+    <div id="chapterModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Chapter</h3>
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+            </div>
+            
+            <form id="addChapterForm">
+                <input type="hidden" id="subjectField" name="subject">
+                
+                <div class="form-group">
+                    <label for="chapterName">Chapter Name</label>
+                    <input type="text" id="chapterName" name="chapterName" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" class="form-control" rows="3"></textarea>
+                </div>
+                
+                <button type="submit" class="btn-submit">Add Chapter</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Modal functionality
+        const modal = document.getElementById('chapterModal');
+        const subjectField = document.getElementById('subjectField');
+        const addChapterForm = document.getElementById('addChapterForm');
+        
+        function openModal(subject) {
+            modal.style.display = 'flex';
+            subjectField.value = subject;
+        }
+        
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+        
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        };
+        
+        // Form submit handler
+        addChapterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const chapterName = document.getElementById('chapterName').value;
+            const description = document.getElementById('description').value;
+            const subject = subjectField.value;
+            
+            // Here you would typically send this data to your backend
+            console.log(`Adding chapter "${chapterName}" to ${subject} subject`);
+            console.log(`Description: ${description}`);
+            
+            // Mock addition to DOM (in a real app, you'd refresh from the server or update the DOM)
+            const subjectPanel = document.querySelector(`.subject-panel:nth-child(${subject === 'physics' ? 1 : 2})`);
+            const tableBody = subjectPanel.querySelector('tbody');
+            
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${chapterName}</td>
+                <td>0</td>
+                <td class="action-links">
+                    <a href="#">Edit</a>/<a href="#">Delete</a>
+                </td>
+            `;
+            
+            tableBody.appendChild(newRow);
+            
+            // Reset form and close modal
+            addChapterForm.reset();
+            closeModal();
+        });
+    </script>
+</body>
+</html>

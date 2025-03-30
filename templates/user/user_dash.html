@@ -1,0 +1,221 @@
+<!-- user_dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+        }
+        
+        /* Main container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Main dashboard card */
+        .dashboard-card {
+            background-color: white;
+            border-radius: 15px;
+            border: 2px solid #ffaa00;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Dashboard header */
+        .dashboard-header {
+            text-align: center;
+            color: #2471e6;
+            font-size: 24px;
+            margin-bottom: 20px;
+            padding: 10px 0;
+        }
+        
+        /* Navigation bar */
+        .nav-bar {
+            background-color: #b3e0ff;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .nav-links a {
+            color: #1a7a1a;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 0 10px;
+        }
+        
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Search box */
+        .search-box {
+            padding: 8px 15px;
+            border: 2px solid #333;
+            border-radius: 15px;
+            width: 200px;
+        }
+        
+        .welcome-message {
+            color: #2471e6;
+            font-size: 18px;
+        }
+        
+        /* Quiz table section */
+        .quiz-section {
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            margin: 15px;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+        
+        /* Table styles */
+        .quiz-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        .quiz-table-header {
+            background-color: #b3e0ff;
+            color: #333;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .quiz-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        
+        /* Action buttons */
+        .action-btn {
+            display: inline-block;
+            padding: 8px 15px;
+            border-radius: 15px;
+            text-decoration: none;
+            margin: 0 5px;
+            font-weight: bold;
+        }
+        
+        .view-btn {
+            background-color: #93c5fd;
+            color: #333;
+        }
+        
+        .start-btn {
+            background-color: #86efac;
+            color: #d00;
+        }
+        
+        /* Dots for pagination */
+        .dots {
+            text-align: center;
+            color: #2471e6;
+            font-size: 24px;
+            letter-spacing: 5px;
+            margin: 10px 0;
+        }
+        
+        /* Annotations */
+        .annotation {
+            position: absolute;
+            color: #1a7a1a;
+            font-size: 16px;
+        }
+        
+        .search-annotation {
+            right: 40px;
+            bottom: -30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="dashboard-header">User Dashboard</h1>
+        
+        <div class="dashboard-card">
+            <!-- Navigation bar -->
+            <div class="nav-bar">
+                <div class="nav-links">
+                    <a href="{{ url_for('home') }}">Home</a> | 
+                    <a href="{{ url_for('scores') }}">Scores</a> | 
+                    <a href="{{ url_for('summary') }}">Summary</a> | 
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                </div>
+                
+                <div class="search-container">
+                    <input type="text" class="search-box" placeholder="Search">
+                </div>
+                
+                <div class="welcome-message">
+                    Welcome {{ user.username }}
+                </div>
+            </div>
+            
+            <!-- Quiz section -->
+            <div class="quiz-section">
+                <h2 class="section-title">Upcoming Quizzes</h2>
+                
+                <table class="quiz-table">
+                    <thead>
+                        <tr>
+                            <th class="quiz-table-header">ID</th>
+                            <th class="quiz-table-header">No.of Questions</th>
+                            <th class="quiz-table-header">Date</th>
+                            <th class="quiz-table-header">Duration(hh:mm)</th>
+                            <th class="quiz-table-header">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for quiz in quizzes %}
+                        <tr>
+                            <td>{{ quiz.id }}</td>
+                            <td>{{ quiz.question_count }}</td>
+                            <td>{{ quiz.date }}</td>
+                            <td>{{ quiz.duration }}</td>
+                            <td>
+                                <a href="{{ url_for('view_quiz', quiz_id=quiz.id) }}" class="action-btn view-btn">View</a>
+                                <a href="{{ url_for('start_quiz', quiz_id=quiz.id) }}" class="action-btn start-btn">Start</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                <!-- Pagination dots -->
+                <div class="dots">•••••</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
