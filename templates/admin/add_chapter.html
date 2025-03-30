@@ -4,14 +4,163 @@
 <div class="container">
     <h2>Add New Chapter</h2>
     <form action="{{ url_for('admin.add_chapter') }}" method="POST">
-        <label for="name">Chapter Name:</label>
-        <input type="text" id="name" name="name" required>
-
-        <label for="description">Description:</label>
-        <textarea id="description" name="description" required></textarea>
-
-        <button type="submit" class="btn">Save</button>
-        <a href="{{ url_for('admin.dashboard') }}" class="btn cancel">Cancel</a>
+        {{ form.hidden_tag() }}
+        
+        <div class="form-group">
+            {{ form.subject_id.label }}
+            {{ form.subject_id(class="form-control") }}
+            {% if form.subject_id.errors %}
+                <div class="error">
+                    {% for error in form.subject_id.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            {{ form.name.label }}
+            {{ form.name(class="form-control") }}
+            {% if form.name.errors %}
+                <div class="error">
+                    {% for error in form.name.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            {{ form.description.label }}
+            {{ form.description(class="form-control") }}
+            {% if form.description.errors %}
+                <div class="error">
+                    {% for error in form.description.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group half">
+                {{ form.order_number.label }}
+                {{ form.order_number(class="form-control") }}
+                {% if form.order_number.errors %}
+                    <div class="error">
+                        {% for error in form.order_number.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <small class="form-text text-muted">Optional. Used for ordering chapters within a subject.</small>
+            </div>
+            
+            <div class="form-group half checkbox-group">
+                {{ form.is_active(class="form-check-input") }}
+                {{ form.is_active.label(class="form-check-label") }}
+                {% if form.is_active.errors %}
+                    <div class="error">
+                        {% for error in form.is_active.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="form-group">
+            {{ form.additional_resources.label }}
+            {{ form.additional_resources(class="form-control") }}
+            {% if form.additional_resources.errors %}
+                <div class="error">
+                    {% for error in form.additional_resources.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <small class="form-text text-muted">Optional. Add links to resources, reference materials, etc.</small>
+        </div>
+        
+        <div class="form-group">
+            {{ form.submit(class="btn") }}
+            <a href="{{ url_for('admin.dashboard') }}" class="btn cancel">Cancel</a>
+        </div>
     </form>
 </div>
+
+<style>
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+    }
+    
+    .form-group.half {
+        width: 48%;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+    
+    textarea.form-control {
+        min-height: 150px;
+    }
+    
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        margin-top: 30px;
+    }
+    
+    .form-check-input {
+        margin-right: 10px;
+        width: 20px;
+        height: 20px;
+    }
+    
+    .form-text.text-muted {
+        font-size: 14px;
+        color: #666;
+        margin-top: 5px;
+    }
+    
+    .btn {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .btn.cancel {
+        background-color: #f44336;
+        margin-left: 10px;
+    }
+    
+    .error {
+        color: red;
+        margin-top: 5px;
+        font-size: 14px;
+    }
+</style>
 {% endblock %}

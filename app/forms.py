@@ -13,10 +13,12 @@ class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=3, max=64)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
-    password2 = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     full_name = StringField('Full Name', validators=[DataRequired()])
-    date_of_birth = DateField('Date of Birth', validators=[DataRequired()])
+    qualification = StringField('Qualification', validators=[DataRequired()])
+    dob = DateField('Date of Birth', format='%Y-%m-%d', validators=[DataRequired()])
     submit = SubmitField('Register')
+    
     
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()

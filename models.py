@@ -5,14 +5,16 @@ from datetime import datetime
 
 db = SQLAlchemy()
 
-class User(UserMixin, db.Model):
+class User(db.Model,UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), unique=True, nullable=False)
+    username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128))
-    full_name = db.Column(db.String(100))
-    date_of_birth = db.Column(db.Date)
+    password_hash = db.Column(db.String(128), nullable=False)
+    full_name = db.Column(db.String(120), nullable=False)
+    dob = db.Column(db.Date, nullable=True)
     is_admin = db.Column(db.Boolean, default=False)
+    qualification = db.Column(db.String(200), nullable=True)
+    is_active = db.Column(db.Boolean, default=True)
     
     quizzes_taken = db.relationship('QuizAttempt', backref='student', lazy='dynamic')
     
@@ -25,17 +27,45 @@ class User(UserMixin, db.Model):
 class Subject(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text)
+    description = db.Column(db.Text, nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
-    chapters = db.relationship('Chapter', backref='subject', lazy='dynamic')
+    # Relationship with chapters
+    chapters = db.relationship('Chapter', backref='subject', lazy=True, cascade="all, delete-orphan")
     
+    def __repr__(self):
+        return f'<Subject {self.name}>'
+
 class Chapter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text)
-    subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'))
+    name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'), nullable=False)
+    order_number = db.Column(db.Integer, nullable=True)  # For ordering chapters
+    is_active = db.Column(db.Boolean, default=True)
+    additional_resources = db.Column(db.Text, nullable=True)  # Links or references
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
-    quizzes = db.relationship('Quiz', backref='chapter', lazy='dynamic')
+    # Relationship with lessons
+    lessons = db.relationship('Lesson', backref='chapter', lazy=True, cascade="all, delete-orphan")
+    
+    def __repr__(self):
+        return f'<Chapter {self.name}>'
+    
+class Lesson(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    chapter_id = db.Column(db.Integer, db.ForeignKey('chapter.id'), nullable=False)
+    order_number = db.Column(db.Integer, nullable=True)  # For ordering lessons within a chapter
+    is_active = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    def __repr__(self):
+        return f'<Lesson {self.title}>'
     
 class Quiz(db.Model):
     id = db.Column(db.Integer, primary_key=True)

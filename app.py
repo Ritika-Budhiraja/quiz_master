@@ -3,6 +3,7 @@ from flask_login import LoginManager, login_user, current_user, logout_user, log
 from urllib.parse import urlparse
 
 
+
 from datetime import datetime, timedelta
 
 from config import Config
@@ -72,21 +73,32 @@ def register():
     
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(
-            username=form.username.data,
-            email=form.email.data,
-            full_name=form.full_name.data,
-            date_of_birth=form.date_of_birth.data
-        )
-        user.set_password(form.password.data)
-        
-        db.session.add(user)
-        db.session.commit()
-        
-        flash('Registration successful! Please log in.')
-        return redirect(url_for('login'))
+        existing_user = User.query.filter((User.username == form.username.data) | (User.email == form.email.data)).first()
+        if existing_user:
+            flash("Username or email already exists. Please use a different one.", "danger")
+            return redirect(url_for('register'))
+
+        try:
+            user = User(
+                username=form.username.data,
+                email=form.email.data,
+                full_name=form.full_name.data,
+                qualification=form.qualification.data,
+                dob=form.dob.data  # Ensure this matches your form field name
+            )
+            user.set_password(form.password.data)
+
+            db.session.add(user)
+            db.session.commit()
+
+            flash('Registration successful! Please log in.', 'success')
+            return redirect(url_for('login'))
+        except Exception as e:
+            db.session.rollback()
+            flash(f"An error occurred: {str(e)}", "danger")
     
     return render_template('auth/register.html', form=form)
+
 
 @app.route('/logout')
 def logout():
@@ -228,8 +240,8 @@ def edit_quiz(quiz_id):
 @app.route('/user/dashboard')
 @login_required
 def user_dashboard():
-    # Get upcoming quizzes
-    upcoming_quizzes = Quiz.query.filter_by(active=True).all()
+    quizzes = Quiz.query.all()  # Fetch all quizzes or specific quizzes based on user
+    return render_template('user/dashboard.html', quizzes=quizzes)  # Pass quizzes list
     
     # Get completed quizzes with scores
     completed_attempts = QuizAttempt.query.filter_by(
@@ -471,4 +483,6 @@ def quiz_results(attempt_id):
                           correct_answers=correct_answers)
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
