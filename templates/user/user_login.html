@@ -1,74 +1,30 @@
-<!-- templates/user/login.html -->
 {% extends "base.html" %}
 
-{% block title %}Login - Quiz Master{% endblock %}
+{% block title %}User Login - Quiz Master{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Login</h3>
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title mb-0">Login</h3>
             </div>
             <div class="card-body">
                 <form method="POST">
                     {{ form.hidden_tag() }}
                     <div class="mb-3">
-                        {{ form.email.label(class="form-label") }}
-                        {{ form.email(class="form-control") }}
+                        {{ form.username.label(class="form-label") }}
+                        {{ form.username(class="form-control") }}
                     </div>
                     <div class="mb-3">
                         {{ form.password.label(class="form-label") }}
                         {{ form.password(class="form-control") }}
                     </div>
-                    <button type="submit" class="btn btn-primary">Login</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-{% endblock %}
-
-<!-- templates/user/register.html -->
-{% extends "base.html" %}
-
-{% block title %}Register - Quiz Master{% endblock %}
-
-{% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Register</h3>
-            </div>
-            <div class="card-body">
-                <form method="POST">
-                    {{ form.hidden_tag() }}
-                    <div class="mb-3">
-                        {{ form.email.label(class="form-label") }}
-                        {{ form.email(class="form-control") }}
+                    <div class="form-check mb-3">
+                        {{ form.remember_me(class="form-check-input") }}
+                        {{ form.remember_me.label(class="form-check-label") }}
                     </div>
-                    <div class="mb-3">
-                        {{ form.password.label(class="form-label") }}
-                        {{ form.password(class="form-control") }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.confirm_password.label(class="form-label") }}
-                        {{ form.confirm_password(class="form-control") }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.full_name.label(class="form-label") }}
-                        {{ form.full_name(class="form-control") }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.qualification.label(class="form-label") }}
-                        {{ form.qualification(class="form-control") }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.dob.label(class="form-label") }}
-                        {{ form.dob(class="form-control", type="date") }}
-                    </div>
-                    <button type="submit" class="btn btn-primary">Register</button>
+                    <button type="submit" class="btn btn-primary w-100">Login</button>
                 </form>
             </div>
         </div>
