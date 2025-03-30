@@ -27,26 +27,23 @@
                     {% if current_user.is_authenticated %}
                         {% if current_user.is_admin %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+                            <a class="nav-link" href="{{ url_for('admin_dashboard') }}">Dashboard</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('admin.subjects') }}">Subjects</a>
+                            <a class="nav-link" href="{{ url_for('manage_subjects') }}">Subjects</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('admin.chapters') }}">Chapters</a>
+                            <a class="nav-link" href="{{ url_for('manage_chapters') }}">Chapters</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('admin.quizzes') }}">Quizzes</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('admin.users') }}">Users</a>
+                            <a class="nav-link" href="{{ url_for('manage_quizzes') }}">Quizzes</a>
                         </li>
                         {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('user.dashboard') }}">Dashboard</a>
+                            <a class="nav-link" href="{{ url_for('user_dashboard') }}">Dashboard</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('user.subjects') }}">Subjects</a>
+                            <a class="nav-link" href="{{ url_for('available_quizzes') }}">Quizzes</a>
                         </li>
                         {% endif %}
                     {% endif %}
@@ -63,12 +60,12 @@
                                 {% endif %}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
                             </ul>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                            <a class="nav-link" href="{{ url_for('user_login') }}">Login</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('register') }}">Register</a>
