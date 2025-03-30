@@ -125,6 +125,23 @@ def dashboard():
         return redirect(url_for('admin_dashboard'))
     else:
         return redirect(url_for('user_dashboard'))
+    
+@app.route('/user/dashboard')
+@login_required
+def user_dashboard():
+    return render_template('user/user_dash.html', user=current_user)
+
+@app.route('/user/scores')
+@login_required
+def scores():
+    return render_template('user/scores.html')
+
+@app.route('/user/summary')
+@login_required
+def summary():
+    return render_template('user/user_summary.html')
+
+
 
 # ✅ MAIN ENTRY POINT TO RUN FLASK APP
 if __name__ == '__main__':
