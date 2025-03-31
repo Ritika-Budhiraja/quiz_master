@@ -13,13 +13,13 @@ app.config.from_object(Config)
 # Initialize extensions
 db.init_app(app)
 login_manager = LoginManager(app)
-login_manager.login_view = 'user_login'  # default if user hits @login_required
+login_manager.login_view = 'user_login'
 
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(int(id))
 
-# Admin user creation CLI remains unchanged
+# CLI command to create admin manually
 @app.cli.command("create-admin")
 def create_admin():
     username = input("Admin username: ")
@@ -33,43 +33,86 @@ def create_admin():
     db.session.commit()
     print(f"Admin user {username} created successfully!")
 
-# Home page
+# ------------------- ROUTES ----------------------
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
-# ----------------------------------------
-# ✅ LOGIN ROUTES (Split by role)
-# ----------------------------------------
-
+# ✅ HARD-CODED ADMIN LOGIN
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
+        # Redirect based on role
+        return redirect(url_for('admin_dashboard') if current_user.is_admin else url_for('user_dashboard'))
 
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data, is_admin=True).first()
-        if user is None or not user.check_password(form.password.data):
-            flash('Invalid admin credentials')
-            return redirect(url_for('admin_login'))
+        if form.username.data == 'admin' and form.password.data == 'admin123':
+            user = User.query.filter_by(username='admin', is_admin=True).first()
+            if not user:
+                user = User(
+                    username='admin',
+                    email='admin@example.com',
+                    is_admin=True,
+                    full_name='Admin User',
+                    qualification='Admin',
+                    dob=datetime.today()
+                )
+                user.set_password('admin123')
+                db.session.add(user)
+                db.session.commit()
 
-        login_user(user, remember=form.remember_me.data)
-        return redirect(url_for('admin_dashboard'))
-
+            login_user(user)
+            return redirect(url_for('admin_dashboard'))
+        else:
+            flash("Invalid admin credentials", "danger")
     return render_template('auth/admin_login.html', form=form)
 
+# ✅ ADMIN ROUTES
+@app.route('/admin/dashboard')
+@login_required
+def admin_dashboard():
+    if not current_user.is_admin:
+        flash("Access denied!", "danger")
+        return redirect(url_for('index'))
+    return render_template('admin/admin_dash.html', admin=current_user)
 
+@app.route('/admin/quiz')
+@login_required
+def admin_quiz():
+    if not current_user.is_admin:
+        flash("Access denied!", "danger")
+        return redirect(url_for('index'))
+    return render_template('admin/add_quiz.html')
+
+@app.route('/admin/summary')
+@login_required
+def admin_summary():
+    if not current_user.is_admin:
+        flash("Access denied!", "danger")
+        return redirect(url_for('index'))
+    return render_template('admin/summary.html')
+
+@app.route('/admin/logout')
+@login_required
+def admin_logout():
+    logout_user()
+    flash("You have been logged out.", "info")
+    return redirect(url_for('admin_login'))
+
+# ✅ USER LOGIN
 @app.route('/user/login', methods=['GET', 'POST'])
 def user_login():
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
+        # Redirect based on role
+        return redirect(url_for('admin_dashboard') if current_user.is_admin else url_for('user_dashboard'))
 
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data, is_admin=False).first()
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid user credentials')
+            flash('Invalid user credentials', 'danger')
             return redirect(url_for('user_login'))
 
         login_user(user, remember=form.remember_me.data)
@@ -77,7 +120,7 @@ def user_login():
 
     return render_template('user/user_login.html', form=form)
 
-# Registration route
+# ✅ USER REGISTRATION
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
@@ -85,9 +128,11 @@ def register():
 
     form = RegistrationForm()
     if form.validate_on_submit():
-        existing_user = User.query.filter((User.username == form.username.data) | (User.email == form.email.data)).first()
+        existing_user = User.query.filter(
+            (User.username == form.username.data) | (User.email == form.email.data)
+        ).first()
         if existing_user:
-            flash("Username or email already exists. Please use a different one.", "danger")
+            flash("Username or email already exists", "danger")
             return redirect(url_for('register'))
 
         try:
@@ -99,11 +144,9 @@ def register():
                 dob=form.dob.data
             )
             user.set_password(form.password.data)
-
             db.session.add(user)
             db.session.commit()
-
-            flash('Registration successful! Please log in.', 'success')
+            flash("Registration successful! Please log in.", "success")
             return redirect(url_for('user_login'))
         except Exception as e:
             db.session.rollback()
@@ -111,40 +154,47 @@ def register():
 
     return render_template('auth/register.html', form=form)
 
-# Logout
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('index'))
-
-# Dashboard redirect based on role
-@app.route('/dashboard')
-@login_required
-def dashboard():
-    if current_user.is_admin:
-        return redirect(url_for('admin_dashboard'))
-    else:
-        return redirect(url_for('user_dashboard'))
-    
+# ✅ USER ROUTES
 @app.route('/user/dashboard')
 @login_required
 def user_dashboard():
+    if current_user.is_admin:
+        flash("Access denied!", "danger")
+        return redirect(url_for('index'))
     return render_template('user/user_dash.html', user=current_user)
 
 @app.route('/user/scores')
 @login_required
 def scores():
+    if current_user.is_admin:
+        flash("Access denied!", "danger")
+        return redirect(url_for('index'))
     return render_template('user/scores.html')
 
 @app.route('/user/summary')
 @login_required
 def summary():
+    if current_user.is_admin:
+        flash("Access denied!", "danger")
+        return redirect(url_for('index'))
     return render_template('user/user_summary.html')
 
+# ✅ LOGOUT (shared)
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
+# ✅ REDIRECT BASED ON ROLE
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    # Redirect based on role
+    return redirect(url_for('admin_dashboard') if current_user.is_admin else url_for('user_dashboard'))
 
-# ✅ MAIN ENTRY POINT TO RUN FLASK APP
+# ✅ RUN APP
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()  # Ensures tables are created before first request
+        db.create_all()
     app.run(debug=True)
